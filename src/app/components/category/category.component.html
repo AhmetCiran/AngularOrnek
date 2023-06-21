@@ -1,0 +1,13 @@
+<ul class="list-group sticky">
+  <li (click)="setCurrentAllCategory()" 
+  routerLink="/products"
+  class={{getAllClass()}}
+   >All Product</li>
+
+  <li (click)="setCurrentCategory(category)" 
+  routerLink="/products/category/{{category.categoryId}}"
+  *ngFor="let category of categories" 
+  class={{getCurrentCategoryClass(category)}}>
+    {{category.categoryName}}</li>
+</ul>
+

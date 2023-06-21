@@ -1,0 +1,61 @@
+<div *ngIf="dataLoaded==false" class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="mb-3">
+    <label for="filterText" class="form-label">Product Search</label>
+    <!-- [(ngModel)]="filterText" product.component.ts class ındaki 
+        filterText değişkenine karşılık geliyor. Bu işlemden sonra
+    app.module.ts içerisine import { FormsModule } from '@angular/forms'; et. ve
+    imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule bölümünede  FormsModule ekle
+
+    -->
+    <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText"
+        placeholder="Search expression input" />
+</div>
+<!-- *ngIf="filterText" ifadesi filterText var ise anlamında -->
+<div *ngIf="filterText" class="alert alert-success">
+    {{filterText}} aradınız
+
+</div>
+<div>
+
+</div>
+<table *ngIf="dataLoaded==true" class="table caption-top">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Product Name</th>
+            <th>Category Id</th>
+            <th>Unit Price</th>
+            <th>KDV'li Fiyatı</th>
+            <th>Units Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- | filterPipe:filterText" tabloda filtrelem yapmak için oluşturduğumuz
+            filter-pipe.ts dosyasını çağırdık -->
+        <tr *ngFor="let product of products | filterPipe:filterText">
+            <td> {{product.productId}} </td>
+            <!-- |uppercase pipe olarak kullanılır ve verinin görünüşünü değiştirir.
+            '|' işareti ile başlanır.  -->
+            <td> {{product.productName |uppercase}} </td>
+            <td> {{product.categoryId}}</td>
+            <td> {{product.unitPrice | currency:'USD'}}</td>
+            <!-- | vatAdded:10 ile kendi oluşturduğumuz pipe çağırıyoruz. 
+            pipe lara parametre vermek için ':' kullanılır.
+            birden fazla parametre gerekirse aynı şekilde devam ederiz. | vatAdded:10:20:30 gibi 
+            birden fazla pipe için '|' işaretini kullanabiliriz. | vatAdded:10:20:30 | currency gibi
+            currency para birimi-->
+            <td> {{product.unitPrice | vatAdded:10 | currency:'USD'}}</td>
+            <td> {{product.unitsInStock}}</td>
+            <td>
+                <button type="submit" (click)="addToCart(product)" class="btn btn-success btn-sm">Sepete ekle</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
